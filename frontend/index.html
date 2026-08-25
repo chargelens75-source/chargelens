@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ChargeLens helps EV drivers find reliable charging stations and understand charging confidence before they arrive."
+    >
+
+    <title>
+        ChargeLens — Know Before You Charge
+    </title>
+
+
+    <!-- =====================================================
+         LEAFLET MAP
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
+    <!-- =====================================================
+         CHARGELENS CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/app.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+
+    <header class="navbar">
+
+        <a
+            href="/"
+            class="brand"
+        >
+
+            <img
+                src="/assets/chargelens_L.png"
+                alt="ChargeLens"
+                class="brand-logo"
+            >
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a
+                href="#explore"
+                class="nav-link active"
+            >
+                Explore
+            </a>
+
+
+            <a
+                href="#how-it-works"
+                class="nav-link"
+            >
+                How it works
+            </a>
+
+        </nav>
+
+
+        <div class="nav-right">
+
+            <button
+                class="login-button"
+                id="loginButton"
+                type="button"
+            >
+                Sign in
+            </button>
+
+
+            <button
+                class="create-account-button"
+                id="createAccountButton"
+                type="button"
+            >
+                Create account
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ===================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section
+            class="hero"
+            id="explore"
+        >
+
+            <div class="hero-content">
+
+
+                <div class="eyebrow">
+                    INDIA'S EV CHARGING RELIABILITY PLATFORM
+                </div>
+
+
+                <h1>
+
+                    Know before
+
+                    <br>
+
+                    <span>
+                        you charge.
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Find EV charging stations and understand
+                    how confident you can be that they'll
+                    actually work when you arrive.
+
+                </p>
+
+
+                <!-- SEARCH -->
+
+                <div class="search-box">
+
+
+                    <div class="search-icon">
+                        ⌕
+                    </div>
+
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Detecting your location..."
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        class="search-button"
+                        id="searchButton"
+                        type="button"
+                    >
+                        Search
+                    </button>
+
+
+                </div>
+
+
+                <div class="pilot-label">
+
+                    <span class="pilot-dot"></span>
+
+                    <span id="heroLocationLabel">
+                        Detecting your location...
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CHARGING STATIONS + MAP
+        ================================================== -->
+
+        <section class="app-section">
+
+
+            <div class="app-layout">
+
+
+                <!-- =========================================
+                     LEFT PANEL
+                ========================================== -->
+
+                <aside class="station-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <p class="panel-eyebrow">
+                                NEARBY CHARGERS
+                            </p>
+
+                            <h2>
+                                Charging stations
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            class="filter-button"
+                            id="filterButton"
+                            type="button"
+                        >
+                            Filter
+                        </button>
+
+
+                    </div>
+
+
+                    <div
+                        class="station-count"
+                        id="stationCount"
+                    >
+                        Loading stations...
+                    </div>
+
+
+                    <div
+                        class="station-list"
+                        id="stationList"
+                    >
+
+                        <div class="loading-state">
+
+                            <div class="loading-spinner"></div>
+
+                            <p>
+                                Finding charging stations...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </aside>
+
+
+
+                <!-- =========================================
+                     MAP
+                ========================================== -->
+
+                <div class="map-container">
+
+
+                    <div
+                        id="map"
+                        class="map"
+                    ></div>
+
+
+                    <div class="map-status">
+
+                        <span class="live-dot"></span>
+
+                        <span>
+                            ChargeLens data
+                        </span>
+
+                    </div>
+
+
+                    <div class="map-legend">
+
+                        <div class="legend-title">
+                            Charging Confidence
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot high"></span>
+
+                            <span>
+                                90–100
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot medium"></span>
+
+                            <span>
+                                70–89
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot low"></span>
+
+                            <span>
+                                Below 70
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             HOW IT WORKS
+        ================================================== -->
+
+        <section
+            class="how-section"
+            id="how-it-works"
+        >
+
+
+            <div class="section-heading">
+
+
+                <p class="section-eyebrow">
+                    THE CHARGELENS DIFFERENCE
+                </p>
+
+
+                <h2>
+
+                    Don't just find a charger.
+
+                    <span>
+                        Know it works.
+                    </span>
+
+                </h2>
+
+
+                <p>
+
+                    Traditional charging maps tell you where
+                    chargers are. ChargeLens tells you how
+                    much you can trust them.
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="feature-grid">
+
+
+                <article class="feature-card">
+
+                    <div class="feature-number">
+                        01
+                    </div>
+
+                    <h3>
+                        Find
+                    </h3>
+
+                    <p>
+
+                        Discover charging stations around you
+                        with connector, power and pricing
+                        information.
+
+                    </p>
+
+                </article>
+
+
+
+                <article class="feature-card">
+
+                    <div class="feature-number">
+                        02
+                    </div>
+
+                    <h3>
+                        Verify
+                    </h3>
+
+                    <p>
+
+                        See recent reports and understand
+                        whether a station is actually reliable.
+
+                    </p>
+
+                </article>
+
+
+
+                <article class="feature-card">
+
+                    <div class="feature-number">
+                        03
+                    </div>
+
+                    <h3>
+                        Charge
+                    </h3>
+
+                    <p>
+
+                        Choose with confidence and avoid
+                        unnecessary detours, failed sessions
+                        and wasted battery.
+
+                    </p>
+
+                </article>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             START EXPLORING CTA
+        ================================================== -->
+
+        <section class="explore-cta">
+
+
+            <div class="explore-cta-content">
+
+
+                <p class="section-eyebrow">
+                    CHARGE WITH CONFIDENCE
+                </p>
+
+
+                <h2>
+
+                    Ready to find your
+
+                    <span>
+                        next charger?
+                    </span>
+
+                </h2>
+
+
+                <p>
+
+                    Explore nearby charging stations and
+                    know what to expect before you arrive.
+
+                </p>
+
+
+                <button
+                    class="start-exploring-button"
+                    id="startExploringButton"
+                    type="button"
+                >
+                    Start exploring
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         STATION DETAIL MODAL
+    ====================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="stationModal"
+    >
+
+
+        <div class="station-modal">
+
+
+            <button
+                class="modal-close"
+                id="modalClose"
+                aria-label="Close"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div
+                id="modalContent"
+                class="modal-content"
+            ></div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         REPORT STATION MODAL
+    ====================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="reportModal"
+    >
+
+        <div class="report-modal">
+
+            <button
+                class="modal-close"
+                id="reportModalClose"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div class="report-header">
+
+                <p class="section-eyebrow">
+                    DRIVER REPORT
+                </p>
+
+                <h2>
+                    Report this charger
+                </h2>
+
+                <p
+                    id="reportStationName"
+                    class="report-station-name"
+                >
+                    Charging station
+                </p>
+
+            </div>
+
+
+            <div class="report-question">
+
+                What is happening right now?
+
+            </div>
+
+
+            <div
+                class="report-options"
+                id="reportOptions"
+            >
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="working"
+                >
+
+                    <span class="report-option-icon green">
+                        ✓
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Working normally
+                        </strong>
+
+                        <small>
+                            Charger is operating normally
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="busy"
+                >
+
+                    <span class="report-option-icon yellow">
+                        ≈
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Busy / queue
+                        </strong>
+
+                        <small>
+                            Other vehicles are waiting
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="broken"
+                >
+
+                    <span class="report-option-icon red">
+                        !
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Charger not working
+                        </strong>
+
+                        <small>
+                            Charging session cannot start
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="maintenance"
+                >
+
+                    <span class="report-option-icon orange">
+                        ⚙
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Under maintenance
+                        </strong>
+
+                        <small>
+                            Station appears to be under service
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="payment_problem"
+                >
+
+                    <span class="report-option-icon blue">
+                        ₹
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Payment problem
+                        </strong>
+
+                        <small>
+                            Payment or authentication issue
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="report-option"
+                    data-report-type="slow_charging"
+                >
+
+                    <span class="report-option-icon cyan">
+                        ⚡
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Charging slower than expected
+                        </strong>
+
+                        <small>
+                            Power output appears unusually low
+                        </small>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <label
+                for="reportComment"
+                class="report-comment-label"
+            >
+                Additional comment
+                <span>Optional</span>
+            </label>
+
+
+            <textarea
+                id="reportComment"
+                class="report-comment"
+                rows="4"
+                maxlength="500"
+                placeholder="Tell other EV drivers what you observed..."
+            ></textarea>
+
+
+            <div
+                id="reportMessage"
+                class="report-message"
+            ></div>
+
+
+            <button
+                type="button"
+                class="report-submit-button"
+                id="submitReportButton"
+            >
+                Submit report
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+<!-- =====================================================
+     AUTHENTICATION MODAL
+====================================================== -->
+
+<div
+    class="modal-overlay"
+    id="loginModal"
+>
+
+    <div class="auth-modal">
+
+        <button
+            class="modal-close"
+            id="loginClose"
+            aria-label="Close"
+            type="button"
+        >
+            ×
+        </button>
+
+
+        <div class="auth-logo">
+
+            <img
+                src="/assets/chargelens_L.png"
+                alt="ChargeLens"
+            >
+
+        </div>
+
+
+        <div class="auth-header">
+
+            <h2 id="authTitle">
+                Welcome to ChargeLens
+            </h2>
+
+            <p id="authSubtitle">
+                Sign in to continue to your
+                ChargeLens experience.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             AUTH TABS
+        ================================================== -->
+
+        <div class="auth-tabs" id="authTabs">
+
+            <button
+                class="auth-tab active"
+                id="signInTab"
+                type="button"
+            >
+                Sign In
+            </button>
+
+            <button
+                class="auth-tab"
+                id="signUpTab"
+                type="button"
+            >
+                Create Account
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SIGN IN
+        ================================================== -->
+
+        <form
+            id="loginForm"
+            class="auth-form"
+        >
+
+            <label for="loginEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+
+
+            <label for="loginPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Sign In
+            </button>
+
+
+            <p
+                class="login-error"
+                id="loginError"
+            ></p>
+
+        </form>
+
+
+        <!-- =================================================
+             CREATE ACCOUNT — STEP 1
+        ================================================== -->
+
+        <div
+            id="registerStepEmail"
+            class="auth-form hidden"
+        >
+
+            <label for="registerEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+
+
+            <button
+                type="button"
+                class="primary-button"
+                id="sendVerificationButton"
+            >
+                Send verification code
+            </button>
+
+
+            <p
+                class="register-message"
+                id="registerMessage"
+            ></p>
+
+        </div>
+
+
+        <!-- =================================================
+             CREATE ACCOUNT — STEP 2
+        ================================================== -->
+
+        <div
+            id="registerStepCode"
+            class="auth-form hidden"
+        >
+
+            <div
+                style="
+                    text-align:center;
+                    margin-bottom:8px;
+                    color:#8fa29a;
+                    line-height:1.5;
+                "
+            >
+                We sent a 6-digit verification code to
+                <strong id="verificationEmail"></strong>
+            </div>
+
+
+            <label for="verificationCode">
+                Verification code
+            </label>
+
+            <input
+                type="text"
+                id="verificationCode"
+                inputmode="numeric"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                placeholder="123456"
+                autocomplete="one-time-code"
+            >
+
+
+            <button
+                type="button"
+                class="primary-button"
+                id="verifyCodeButton"
+            >
+                Verify email
+            </button>
+
+
+            <button
+                type="button"
+                class="secondary-button"
+                id="resendCodeButton"
+            >
+                Resend code
+            </button>
+
+
+            <p
+                class="register-message"
+                id="verificationMessage"
+            ></p>
+
+        </div>
+
+
+        <!-- =================================================
+             CREATE ACCOUNT — STEP 3
+        ================================================== -->
+
+        <form
+            id="registerPasswordForm"
+            class="auth-form hidden"
+        >
+
+            <label for="verifiedRegisterEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="verifiedRegisterEmail"
+                readonly
+            >
+
+
+            <label for="verifiedRegisterPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="verifiedRegisterPassword"
+                minlength="8"
+                placeholder="Create a password"
+                autocomplete="new-password"
+                required
+            >
+
+
+            <label for="verifiedRegisterConfirmPassword">
+                Confirm Password
+            </label>
+
+            <input
+                type="password"
+                id="verifiedRegisterConfirmPassword"
+                minlength="8"
+                placeholder="Repeat your password"
+                autocomplete="new-password"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Create account
+            </button>
+
+
+            <p
+                class="register-message"
+                id="passwordRegisterMessage"
+            ></p>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+    <!-- =====================================================
+         LEAFLET JS
+    ====================================================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+
+
+    <!-- =====================================================
+         CHARGELENS JS
+    ====================================================== -->
+
+    <script src="/app.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ChargeLens Admin</title>
+
+
+    <!-- =================================================
+         ADMIN CSS
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/admin/admin.css"
+    >
+
+
+    <!-- =================================================
+         LEAFLET CSS
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="admin-app">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <img
+                src="/assets/chargelens_L.png"
+                alt="ChargeLens"
+            >
+
+            <span>
+                ADMIN CONTROL CENTER
+            </span>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <button
+                class="sidebar-item active"
+                data-section="overview"
+                type="button"
+            >
+                <span>▦</span>
+                Overview
+            </button>
+
+
+            <button
+                class="sidebar-item"
+                data-section="stations"
+                type="button"
+            >
+                <span>⚡</span>
+                Stations
+            </button>
+
+
+            <button
+                class="sidebar-item"
+                data-section="reports"
+                type="button"
+            >
+                <span>◉</span>
+                Driver Reports
+            </button>
+
+
+            <button
+                class="sidebar-item"
+                data-section="confidence"
+                type="button"
+            >
+                <span>◇</span>
+                Confidence
+            </button>
+
+
+            <!-- OWNER ONLY -->
+
+            <button
+                class="sidebar-item"
+                data-section="access"
+                type="button"
+            >
+                <span>♙</span>
+                Admin Access
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                id="backToApp"
+                class="sidebar-secondary"
+                type="button"
+            >
+                ← Back to ChargeLens
+            </button>
+
+
+            <button
+                id="logoutButton"
+                class="sidebar-danger"
+                type="button"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="admin-header">
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    CHARGELENS CONTROL CENTER
+                </p>
+
+                <h1 id="pageTitle">
+                    Overview
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <div class="admin-user-status">
+
+                    <span></span>
+
+                    Secure session
+
+                </div>
+
+
+                <strong id="adminEmail">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             OVERVIEW
+        ================================================== -->
+
+        <section
+            class="admin-section active"
+            id="section-overview"
+        >
+
+            <div class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        TOTAL STATIONS
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="totalStations"
+                    >
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        All registered stations
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        ACTIVE STATIONS
+                    </div>
+
+                    <div
+                        class="stat-value green"
+                        id="activeStations"
+                    >
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        Currently visible to drivers
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        AVG CONFIDENCE
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="averageConfidence"
+                    >
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        Platform-wide reliability
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        REPORTS TODAY
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="reportsToday"
+                    >
+                        —
+                    </div>
+
+                    <div class="stat-footer">
+                        Driver activity
+                    </div>
+
+                </article>
+
+            </div>
+
+
+
+            <div class="dashboard-grid">
+
+
+                <!-- PLATFORM HEALTH -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <p>
+                                PLATFORM HEALTH
+                            </p>
+
+                            <h2>
+                                Confidence overview
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-content">
+
+                        <div
+                            class="health-ring"
+                            id="healthRing"
+                        >
+
+                            <div>
+
+                                <strong
+                                    id="healthScore"
+                                >
+                                    —
+                                </strong>
+
+                                <span>
+                                    Average
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-text">
+
+                            <strong
+                                id="healthLabel"
+                            >
+                                Calculating...
+                            </strong>
+
+                            <p>
+                                Overall confidence across
+                                active ChargeLens stations.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <p>
+                                QUICK ACTIONS
+                            </p>
+
+                            <h2>
+                                Manage ChargeLens
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <button
+                            type="button"
+                            data-section-jump="stations"
+                        >
+                            ⚡ Manage stations
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-section-jump="reports"
+                        >
+                            ◉ Review reports
+                        </button>
+
+
+                        <button
+                            type="button"
+                            data-section-jump="confidence"
+                        >
+                            ◇ View confidence
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RECENT REPORTS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <p>
+                            LATEST ACTIVITY
+                        </p>
+
+                        <h2>
+                            Recent driver reports
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        class="view-button"
+                        type="button"
+                        data-section-jump="reports"
+                    >
+                        View all
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="report-table"
+                    id="overviewReports"
+                >
+
+                    <div class="table-loading">
+                        Loading reports...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATION MANAGEMENT
+        ================================================== -->
+
+        <section
+            class="admin-section"
+            id="section-stations"
+        >
+
+            <div class="section-intro station-section-header">
+
+                <div>
+
+                    <p class="admin-eyebrow">
+                        STATION MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Charging stations
+                    </h2>
+
+                    <p>
+                        Add, edit, activate, or disable
+                        stations available to ChargeLens drivers.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="addStationButton"
+                    class="admin-primary-button"
+                    type="button"
+                >
+
+                    <span>+</span>
+
+                    Add Station
+
+                </button>
+
+            </div>
+
+
+
+            <!-- STATION SUMMARY -->
+
+            <div class="station-summary">
+
+                <div class="station-summary-item">
+
+                    <span
+                        class="
+                            summary-dot
+                            green-dot
+                        "
+                    ></span>
+
+                    <span>
+                        Active
+                    </span>
+
+                    <strong
+                        id="stationActiveSummary"
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="station-summary-item">
+
+                    <span
+                        class="
+                            summary-dot
+                            red-dot
+                        "
+                    ></span>
+
+                    <span>
+                        Disabled
+                    </span>
+
+                    <strong
+                        id="stationDisabledSummary"
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="station-summary-item">
+
+                    <span
+                        class="
+                            summary-dot
+                            yellow-dot
+                        "
+                    ></span>
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong
+                        id="stationTotalSummary"
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="dashboard-card">
+
+                <div
+                    class="station-admin-table"
+                    id="stationAdminTable"
+                >
+
+                    <div class="table-loading">
+                        Loading stations...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DRIVER REPORTS
+        ================================================== -->
+
+        <section
+            class="admin-section"
+            id="section-reports"
+        >
+
+            <div class="section-intro">
+
+                <p class="admin-eyebrow">
+                    DRIVER INTELLIGENCE
+                </p>
+
+                <h2>
+                    Driver reports
+                </h2>
+
+                <p>
+                    Review the latest information submitted
+                    by ChargeLens drivers.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div
+                    class="report-table"
+                    id="adminReportsTable"
+                >
+
+                    <div class="table-loading">
+                        Loading reports...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONFIDENCE
+        ================================================== -->
+
+        <section
+            class="admin-section"
+            id="section-confidence"
+        >
+
+            <div class="section-intro">
+
+                <p class="admin-eyebrow">
+                    CHARGING INTELLIGENCE
+                </p>
+
+                <h2>
+                    Confidence monitoring
+                </h2>
+
+                <p>
+                    See how reliable your stations appear
+                    to drivers.
+                </p>
+
+            </div>
+
+
+            <div
+                class="confidence-admin-grid"
+                id="confidenceAdminGrid"
+            >
+
+                <div class="table-loading">
+                    Loading confidence data...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ADMIN ACCESS
+        ================================================== -->
+
+        <section
+            class="admin-section"
+            id="section-access"
+        >
+
+            <div class="section-intro">
+
+                <p class="admin-eyebrow">
+                    OWNER CONTROL
+                </p>
+
+                <h2>
+                    Admin access
+                </h2>
+
+                <p>
+                    Give or remove administrator access.
+                    Only the platform owner can perform these actions.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <p>
+                            ACCESS MANAGEMENT
+                        </p>
+
+                        <h2>
+                            Users & administrators
+                        </h2>
+
+                    </div>
+
+
+                    <div class="owner-badge">
+                        OWNER ONLY
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="user-admin-table"
+                    id="userAdminTable"
+                >
+
+                    <div class="table-loading">
+                        Loading users...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     ADD / EDIT STATION MODAL
+========================================================= -->
+
+<div
+    class="admin-modal-overlay"
+    id="stationFormModal"
+>
+
+    <div class="admin-form-modal">
+
+
+        <button
+            class="admin-modal-close"
+            id="stationFormClose"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <p class="admin-eyebrow">
+            STATION MANAGEMENT
+        </p>
+
+
+        <h2 id="stationFormTitle">
+            Add station
+        </h2>
+
+
+        <p class="admin-form-subtitle">
+
+            Enter accurate station information.
+            Search for the address, use your current
+            location, or click the map to choose the
+            exact charger location.
+
+        </p>
+
+
+
+        <form
+            id="stationForm"
+        >
+
+            <input
+                type="hidden"
+                id="editStationId"
+            >
+
+
+            <div class="admin-form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="admin-form-field full">
+
+                    <label for="stationName">
+                        Station name
+                    </label>
+
+                    <input
+                        id="stationName"
+                        type="text"
+                        required
+                        autocomplete="off"
+                        placeholder="ChargeLens Koramangala"
+                    >
+
+                </div>
+
+
+
+                <!-- OPERATOR -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationOperator">
+                        Operator
+                    </label>
+
+                    <input
+                        id="stationOperator"
+                        type="text"
+                        required
+                        autocomplete="off"
+                        placeholder="Tata Power"
+                    >
+
+                </div>
+
+
+
+                <!-- CONNECTOR -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationConnector">
+                        Connector
+                    </label>
+
+                    <select
+                        id="stationConnector"
+                    >
+
+                        <option value="CCS2">
+                            CCS2
+                        </option>
+
+                        <option value="Type 2">
+                            Type 2
+                        </option>
+
+                        <option value="CHAdeMO">
+                            CHAdeMO
+                        </option>
+
+                        <option value="GB/T">
+                            GB/T
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- ADDRESS -->
+
+                <div class="admin-form-field full">
+
+                    <label for="stationAddress">
+                        Station address
+                    </label>
+
+                    <input
+                        id="stationAddress"
+                        type="text"
+                        autocomplete="street-address"
+                        placeholder="Full station address"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOCATION SEARCH
+                ================================================== -->
+
+                <div class="admin-form-field full">
+
+                    <label>
+                        Find station location
+                    </label>
+
+
+                    <div class="station-location-tools">
+
+
+                        <div class="location-search-row">
+
+                            <input
+                                id="stationAddressSearch"
+                                type="text"
+                                placeholder="Search an address or place in India..."
+                                autocomplete="off"
+                            >
+
+
+                            <button
+                                id="searchLocationButton"
+                                type="button"
+                                class="admin-secondary-button"
+                            >
+                                Search
+                            </button>
+
+                        </div>
+
+
+                        <div class="location-secondary-row">
+
+                            <button
+                                id="useMyLocationButton"
+                                type="button"
+                                class="location-button"
+                            >
+                                ◎ Use my current location
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="locationSearchMessage"
+                            class="location-search-message"
+                        ></div>
+
+
+                        <!-- MAP -->
+
+                        <div
+                            id="stationFormMap"
+                            class="station-form-map"
+                        ></div>
+
+
+                        <small class="map-hint">
+
+                            Search an address, use your current
+                            location, click anywhere on the map,
+                            or drag the marker.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LATITUDE -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationLatitude">
+                        Latitude
+                    </label>
+
+                    <input
+                        id="stationLatitude"
+                        type="number"
+                        step="any"
+                        required
+                        placeholder="12.935200"
+                    >
+
+                </div>
+
+
+
+                <!-- LONGITUDE -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationLongitude">
+                        Longitude
+                    </label>
+
+                    <input
+                        id="stationLongitude"
+                        type="number"
+                        step="any"
+                        required
+                        placeholder="77.624500"
+                    >
+
+                </div>
+
+
+
+                <!-- POWER -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationPower">
+                        Power (kW)
+                    </label>
+
+                    <input
+                        id="stationPower"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        required
+                        placeholder="60"
+                    >
+
+                </div>
+
+
+
+                <!-- PRICE -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationPrice">
+                        Price / kWh (₹)
+                    </label>
+
+                    <input
+                        id="stationPrice"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        required
+                        placeholder="18"
+                    >
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationStatus">
+                        Current status
+                    </label>
+
+                    <select
+                        id="stationStatus"
+                    >
+
+                        <option value="available">
+                            Available
+                        </option>
+
+                        <option value="busy">
+                            Busy
+                        </option>
+
+                        <option value="maintenance">
+                            Maintenance
+                        </option>
+
+                        <option value="broken">
+                            Broken
+                        </option>
+
+                        <option value="unknown">
+                            Unknown
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- VISIBILITY -->
+
+                <div class="admin-form-field">
+
+                    <label for="stationActive">
+                        Driver visibility
+                    </label>
+
+                    <select
+                        id="stationActive"
+                    >
+
+                        <option value="true">
+                            Active
+                        </option>
+
+                        <option value="false">
+                            Disabled
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                id="stationFormMessage"
+                class="admin-form-message"
+            ></div>
+
+
+
+            <div
+                class="admin-form-actions"
+            >
+
+                <button
+                    type="button"
+                    class="admin-secondary-button"
+                    id="stationFormCancel"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="admin-primary-button"
+                    id="stationFormSubmit"
+                >
+                    Save station
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     LEAFLET JAVASCRIPT
+     IMPORTANT: LOAD BEFORE ADMIN.JS
+========================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+
+<!-- =========================================================
+     CHARGELENS ADMIN JAVASCRIPT
+========================================================= -->
+
+<script
+    src="/admin/admin.js"
+></script>
+
+<script
+    src="/admin/admin-community.js"
+></script>
+
+
+</body>
+
+</html>
